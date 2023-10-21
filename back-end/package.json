@@ -1,0 +1,24 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "The back end service for the Office Queue Management System",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest --forceExit",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "supertest": "^6.3.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "collectCoverage": true
+  }
+}
