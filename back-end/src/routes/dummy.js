@@ -9,4 +9,12 @@ const router = require('express').Router({ mergeParams: true });
  */
 router.get('/hello', controller.sendHelloWorld);
 
+/**
+ * @description Return the list of counters available in the database
+ *
+ * @route /api/dummy/counters
+ * @method GET
+ */
+router.get('/counters', controller.getCounters);
+
 module.exports = router;
