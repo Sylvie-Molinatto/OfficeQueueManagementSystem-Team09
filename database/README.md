@@ -6,6 +6,7 @@
 ### services
 - code (text): uniquely identifies the service
 - label (text): human-readable name of the service
+- description (text): human-readable description of the service
 ### counters
 - id (integer): uniquely identifies the counter
 - available (integer): whether the counter is available (1) or not (0)

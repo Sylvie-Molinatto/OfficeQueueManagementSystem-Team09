@@ -8,7 +8,8 @@ CREATE TABLE counters (
 DROP TABLE IF EXISTS services;
 CREATE TABLE services (
                          code TEXT PRIMARY KEY,
-                         label TEXT NOT NULL
+                         label TEXT NOT NULL,
+                         description TEXT NOT NULL DEFAULT ''
 );
 
 DROP TABLE IF EXISTS counters_services;
