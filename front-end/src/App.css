@@ -1,8 +1,11 @@
 
-/* Styles related to NavBar */
-.navbar-padding {
-  padding-left: 1rem;
-  padding-right: 1rem;
+.no-padding{
+  padding: 0;
+}
+
+.notLink{
+  text-decoration: none;
+  color: white;
 }
 
 /* Icons */
@@ -14,3 +17,4 @@
 .below-nav {
   margin-top: 5rem;
 }
+

@@ -1,4 +1,3 @@
-import { LoginForm } from "./AuthComponents";
 import { Form, Button, Container, Row, Col, Card, Dropdown, DropdownButton, Alert } from "react-bootstrap";
 import React, { useState } from 'react';
 
@@ -63,12 +62,18 @@ function ClientLayout() {
   );
 }
 
-
-
-function LoginLayout() {
-    return (
-        <LoginForm />
-    )
+function OfficerLayout(){
+  return(
+    <>
+    </>
+  );
 }
 
-export { ClientLayout, LoginLayout };
+function MonitorLayout(){
+  return(
+    <>
+    </>
+  );
+}
+
+export { ClientLayout, OfficerLayout, MonitorLayout };
