@@ -13,7 +13,7 @@ const app = express()
     .use( timeoutHandlerMiddleware );
 
 // Routes
-app.use('/api/dummy', require('./src/routes/dummy') );
+app.use('/api/services', require('./src/routes/services') );
 
 // Error handler
 app.use((err, req, res, next) => {
