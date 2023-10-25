@@ -5,6 +5,13 @@ const { UnknownServiceOfficeError } = require("../errors/UnknownServiceOfficeErr
 class OfficeQueueService {
 
     /**
+     * @returns {Promise<Service[]>}
+     */
+    async getAllServices() {
+        return db.prepare('SELECT * FROM services').all();
+    }
+
+    /**
      * @param {string} code The service identifier code
      *
      * @returns {Promise<Ticket>} The ticket added to the queue
@@ -42,4 +49,12 @@ module.exports = service;
  * @property {number | null} counter_id The id of the counter that serve the ticket
  * @property {string | null} serving_date The date when the ticket was called in ISO 8601 format
  * @property {string | null} completion_date The date when the ticket was served in ISO 8601 format
+ */
+
+/**
+ * @typedef {Object} Service
+ *
+ * @property {string} code The service identifier code
+ * @property {string} label The service label
+ * @property {string} description The service description
  */
