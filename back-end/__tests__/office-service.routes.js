@@ -3,9 +3,11 @@ const request = require("supertest");
 const app = require('../app');
 const service = require('../src/services/office-queue');
 const { UnknownServiceOfficeError } = require("../src/errors/UnknownServiceOfficeError");
+const { getAllServices } = require('../src/controllers/services'); 
 
 jest.mock('../src/services/office-queue', () => ({
     addTicketToQueue: jest.fn(),
+    getAllServices: jest.fn()
 }));
 
 describe('[ROUTES] Office services', () => {
@@ -44,6 +46,47 @@ describe('[ROUTES] Office services', () => {
                 message: 'The service "A02" targeted by the request is unknown.',
             });
             expect(service.addTicketToQueue).toHaveBeenCalledWith('A02');
+        });
+    });
+
+    describe('GET /api/services', () => {
+
+        test('should return the formatted services while request success', async () => {
+            // Mock the getAllServices function to return an array of services
+            service.getAllServices.mockResolvedValue([
+                {
+                    label: 'Service 1',
+                    description: '',
+                    code: 'S1'
+                },
+                // Add more services as needed
+            ]);
+    
+            const res = await request(app).get('/api/services');
+    
+            // Check the response body to match the format
+            expect(res.body).toEqual([
+                {
+                    label: 'Service 1',
+                    description: '',
+                    code: 'S1'
+                },
+                // Add more services as needed
+            ]);
+        });
+        test('should handle errors by calling next with the error', async () => {
+            // Mock the getAllServices function to reject with an error
+            const error = new Error('An error occurred');
+            jest.spyOn(service, 'getAllServices').mockRejectedValue(error);
+    
+            const req = {}; // You can customize the request object if needed
+            const res = { status: jest.fn(), json: jest.fn() };
+            const next = jest.fn();
+    
+            await getAllServices(req, res, next);
+    
+            // Ensure next is called with the error
+            expect(next).toHaveBeenCalledWith(error);
         });
     });
 });
