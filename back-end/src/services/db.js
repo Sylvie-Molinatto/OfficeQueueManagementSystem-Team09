@@ -10,3 +10,10 @@ const options = {
 const db = betterSqlite3(PATH_DB, options);
 
 module.exports = db;
+
+/**
+ * @typedef {Object} InsertQueryResult
+ *
+ * @property {number} lastInsertRowid The last inserted row id
+ * @property {number} changes The number of rows affected by the query
+ */

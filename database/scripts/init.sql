@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS tickets;
 CREATE TABLE tickets (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         service_code TEXT NOT NULL,
-                        creation_date TEXT NOT NULL,
+                        creation_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
                         counter_id INTEGER,
                         serving_date TEXT,
                         completion_date TEXT,
