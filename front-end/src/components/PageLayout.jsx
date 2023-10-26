@@ -1,5 +1,6 @@
 import { Button, Container, Row, Col, Card, DropdownButton, Alert, Spinner } from "react-bootstrap";
 import { useState, useEffect, useContext } from 'react';
+import { useParams } from "react-router-dom";
 import MessageContext from "../messageCtx";
 import API from '../API'
 
@@ -81,6 +82,7 @@ function ClientLayout() {
 
 
 function OfficerLayout() {
+    const {id} = useParams();
     const [newCustomer, setNewCustomer] = useState(null);
     const centerStyle = {
         display: 'flex',
@@ -91,8 +93,9 @@ function OfficerLayout() {
     const { handleErrors } = useContext(MessageContext);
 
     const callCustomer = () => {
-        //let calledCustomer= tickets.pop();
-        //setNewCustomer(calledCustomer);
+        API.callCustomer(id)
+        .then((x) => setNewCustomer(x))
+        .catch((err) => handleErrors(err));
     };
 
 
