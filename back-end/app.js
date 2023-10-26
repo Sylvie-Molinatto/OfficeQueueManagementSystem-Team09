@@ -14,6 +14,7 @@ const app = express()
 
 // Routes
 app.use('/api/services', require('./src/routes/services') );
+app.use('/api/counters', require('./src/routes/counters') );
 
 // Error handler
 app.use((err, req, res, next) => {
