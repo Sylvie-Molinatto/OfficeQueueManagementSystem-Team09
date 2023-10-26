@@ -33,6 +33,7 @@ class OfficeQueueService {
             throw e;
         }
     }
+    
 }
 
 const service = new OfficeQueueService();

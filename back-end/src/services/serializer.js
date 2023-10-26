@@ -25,6 +25,7 @@ class SerializerService {
             description: service.description,
         };
     }
+
 }
 
 const service = new SerializerService();

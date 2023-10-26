@@ -1,6 +1,9 @@
 const db = require("./db");
 const { UnknownCounterError } = require("../errors/UnknownCounterError");
 const { InvalidCounterStateError } = require("../errors/InvalidCounterStateError");
+const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 
 class CountersService {
     /**
@@ -37,7 +40,8 @@ class CountersService {
      * @return {Promise<Ticket>}
      */
     async indicateTicketAsServed(id) {
-        const res = db.prepare("UPDATE tickets SET completion_date = datetime('now') WHERE counter_id = ? AND serving_date IS NOT NULL AND completion_date IS NULL").run(id);
+        const date = dayjs.utc().format("YYYY-MM-DD HH:mm:ss");
+        const res = db.prepare("UPDATE tickets SET completion_date = ? WHERE counter_id = ? AND serving_date IS NOT NULL AND completion_date IS NULL LIMIT 1").run(date, id);
         if (res.changes !== 1) {
             // Invalid counter id or no ticket currently served, try to determine which one
             const counter = db.prepare("SELECT * FROM counters WHERE id = ?").get(id);
@@ -57,24 +61,27 @@ class CountersService {
      * @return {Promise<Ticket>}
      */
     async callCustomer(id) {
+        const date = dayjs.utc().format("YYYY-MM-DD HH:mm:ss");
         // Self-called transaction
         db.transaction(() => {
             const counter = db.prepare("SELECT * FROM counters WHERE id = ?").get(id);
+            console.log(counter);
             if (!counter) {
                 throw new UnknownCounterError(id);
             }
 
             const ticketAssigned = this._getCurrentTicketServed(id);
+            console.log(ticketAssigned);
             if (ticketAssigned) {
                 throw new InvalidCounterStateError(`The counter with "${id}" is already serving a ticket and cannot call another customer.`)
             }
 
-            const res = db.prepare("UPDATE tickets SET counter_id = ?, serving_date = datetime() WHERE serving_date IS NULL AND completion_date IS NULL AND service_code IN (SELECT service_code FROM counters_services WHERE counter_id = ?)").run(id, id);
+            const res = db.prepare("UPDATE tickets SET counter_id = ?, serving_date = ? WHERE serving_date IS NULL AND completion_date IS NULL AND service_code IN (SELECT service_code FROM counters_services WHERE counter_id = ?) LIMIT 1").run(id, date, id);
+            console.log(res);
             if (res.changes !== 1) {
                 throw new InvalidCounterStateError(`No customer waiting for the counter with "${id}".`)
             }
         })();
-
         return this._getCurrentTicketServed(id);
     }
 
