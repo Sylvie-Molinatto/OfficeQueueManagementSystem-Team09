@@ -12,7 +12,7 @@ const Navigation = () => {
                 </Navbar.Brand>
             </Link>
           <Nav className="md-auto" activeKey={location.pathname}>
-            <Nav.Link href="/" activeClassName="active" eventKey="/">Client</Nav.Link>
+            <Nav.Link href="/" active className="active" eventKey="/">Client</Nav.Link>
             <Nav.Link href="/Officer">Officer</Nav.Link>
             <Nav.Link href="/Monitor">Monitor</Nav.Link>
           </Nav>

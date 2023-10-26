@@ -1,5 +1,6 @@
 import { Button, Container, Row, Col, Card, DropdownButton, Alert, Spinner } from "react-bootstrap";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import MessageContext from "../messageCtx";
 import API from '../API'
 
 
@@ -8,6 +9,7 @@ function ClientLayout() {
     const [services, setServices] = useState([]); // Array of empty objects for storing services
     const [ticket, setTicket] = useState(null); // Empty object for storing infos of the last created ticket
     const [isLoading, setIsLoading] = useState(true);
+    const { handleErrors } = useContext(MessageContext);
 
     useEffect(() => {
         API.getServices()
@@ -15,12 +17,8 @@ function ClientLayout() {
                 setServices(x);
                 setIsLoading(false);
             })
-            .catch((err) => handleError(err));
+            .catch((err) => handleErrors(err));
     }, []);
-
-    function handleError(err) {
-        //todo show error messages (maybe as toast)
-    }
 
     function MyAlert() {
         return (
@@ -53,7 +51,7 @@ function ClientLayout() {
         const createTicket = (code) => {
             API.createTicket(code)
                 .then((x) => setTicket(x))
-                .catch((err) => handleError(err));
+                .catch((err) => handleErrors(err));
         }
 
         return (
@@ -90,6 +88,7 @@ function OfficerLayout() {
         alignItems: 'center',
         height: '100vh',
     };
+    const { handleErrors } = useContext(MessageContext);
 
     const callCustomer = () => {
         //let calledCustomer= tickets.pop();
