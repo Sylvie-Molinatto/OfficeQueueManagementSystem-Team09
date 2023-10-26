@@ -17,4 +17,12 @@ router.get('/', controller.getAllServices);
  */
 router.post('/:code/queue', controller.addTicketToQueue);
 
+/**
+ * @description List all available services
+ *
+ * @route /api/services/counters
+ * @method GET
+ */
+router.get('/counters', controller.getAllCounters);
+
 module.exports = router;

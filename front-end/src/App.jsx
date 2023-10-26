@@ -7,6 +7,7 @@ import { ClientLayout, OfficerLayout, MonitorLayout } from './components/pageLay
 import { useState } from 'react';
 import './App.css'
 import { Navigation } from './components/Navigation';
+import { HomePage } from './components/HomePage';
 
 function App() {
 
@@ -31,8 +32,9 @@ function App() {
             <Toast.Body>{ message }</Toast.Body>
           </Toast>
           <Routes>
-            <Route path="/" element={<ClientLayout/>}/>
-            <Route path="/Officer" element={<OfficerLayout/>}/>
+            <Route path="/" element={<HomePage handleErrors={handleErrors}/>}/>
+            <Route path="/Client" element={<ClientLayout/>}/>
+            <Route path="/Officer/:id" element={<OfficerLayout/>}/>
             <Route path="/Monitor" element={<MonitorLayout/>}/>
           </Routes>
         </Container>

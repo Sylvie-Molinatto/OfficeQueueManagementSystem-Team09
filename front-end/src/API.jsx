@@ -46,7 +46,21 @@ function createTicket(code) {
   });
 }
 
+//GET all the listed counters
+async function getCounters() {
+  const response = await fetch(URL + '/counters');
+  const counters = await response.json();
+  if (response.ok) {
+    return counters.map((c) => ({
+      id: c.id,
+      available: c.available,
+    }))
+  } else {
+    throw counters;
+  }
+}
+
 const API = {
-  createTicket, getServices
+  createTicket, getServices, getCounters
 };
 export default API;

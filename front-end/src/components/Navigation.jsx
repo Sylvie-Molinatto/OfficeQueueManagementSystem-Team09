@@ -11,11 +11,12 @@ const Navigation = () => {
                     <i className="bi bi-person-workspace icon-size"> Office Queue Management System</i>
                 </Navbar.Brand>
             </Link>
-          <Nav className="md-auto" activeKey={location.pathname}>
+        
+          {/* <Nav className="md-auto" activeKey={location.pathname}>
             <Nav.Link href="/" active className="active" eventKey="/">Client</Nav.Link>
             <Nav.Link href="/Officer">Officer</Nav.Link>
             <Nav.Link href="/Monitor">Monitor</Nav.Link>
-          </Nav>
+          </Nav> */}
         </Container>
       </Navbar>
     );

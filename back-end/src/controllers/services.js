@@ -25,7 +25,17 @@ async function addTicketToQueue(req, res, next) {
     }
 }
 
-module.exports = { getAllServices, addTicketToQueue };
+async function getAllCounters(req, res, next) {
+    try {
+        const counters = await service.getAllCounters();
+
+        res.status(200).json( counters.map(serializeCounter) );
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = { getAllServices, addTicketToQueue, getAllCounters };
 
 /**
  * @param {Ticket} ticket
@@ -57,6 +67,18 @@ function serializeService(service) {
 }
 
 /**
+ * @param {Counter} counter
+ *
+ * @return {CounterSerialized}
+ */
+function serializeCounter(counter) {
+    return {
+        id: counter.id,
+        available: counter.available,
+    };
+}
+
+/**
  * @typedef {Object} ServiceSerialized
  *
  * @property {string} code The service identifier code
@@ -73,4 +95,11 @@ function serializeService(service) {
  * @property {number | null} counterId The id of the counter that serve the ticket
  * @property {string | null} servingDate The date when the ticket was called in ISO 8601 format
  * @property {string | null} completionDate The date when the ticket was served in ISO 8601 format
+ */
+
+/**
+ * @typedef {Object} CounterSerialized
+ *
+ * @property {string} id The counter identifier code
+ * @property {string} label The counter status
  */

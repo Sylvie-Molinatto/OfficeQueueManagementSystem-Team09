@@ -34,6 +34,10 @@ class OfficeQueueService {
             throw e;
         }
     }
+    
+    async getAllCounters() {
+        return db.prepare('SELECT * FROM counters').all();
+    }
 }
 
 const service = new OfficeQueueService();
@@ -57,4 +61,11 @@ module.exports = service;
  * @property {string} code The service identifier code
  * @property {string} label The service label
  * @property {string} description The service description
+ */
+
+/**
+ * @typedef {Object} Counter
+ *
+ * @property {number} id The counter identifier code
+ * @property {string} available The counter status
  */
