@@ -60,7 +60,24 @@ async function getCounters() {
   }
 }
 
+async function callCustomer(id) {
+  const response = await fetch(URL + '/counters/' + id + '/request-customer',
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });  
+  const ticket = await response.json();
+  if (response.ok) {
+    return ticket;
+  } else {
+    throw ticket;
+  }
+
+}
+
 const API = {
-  createTicket, getServices, getCounters
+  createTicket, getServices, getCounters, callCustomer
 };
 export default API;
