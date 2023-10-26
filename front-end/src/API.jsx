@@ -1,8 +1,8 @@
-const URL = 'http://localhost:3000/api/services';
+const URL = 'http://localhost:3000/api';
 
 //GET all the listed services
 async function getServices() {
-  const response = await fetch(URL);
+  const response = await fetch(URL + '/services');
   const services = await response.json();
   if (response.ok) {
     return services.map((x) => ({
@@ -18,7 +18,7 @@ async function getServices() {
 // POST a new Ticket
 function createTicket(code) {
   return new Promise((resolve, reject) => {
-    fetch(URL + `/${code}/queue`, { // call to /api/services/<code>/queue
+    fetch(URL + `/services/${code}/queue`, { // call to /api/services/<code>/queue
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
