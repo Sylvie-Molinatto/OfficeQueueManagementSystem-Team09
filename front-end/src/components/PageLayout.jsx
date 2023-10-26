@@ -104,17 +104,17 @@ function OfficerLayout() {
 
     const handleCallCustomer = () => {
         API.callCustomer(id)
-        .then((x) => {
-            setCounter({id: counter.id, available: counter.available, currentTicket: x, services: counter.services});
-        })
+        .catch((err) => handleErrors(err));
+        API.getCounter(id)
+        .then((c) => setCounter(c))
         .catch((err) => handleErrors(err));
     };
 
     const terminateService = () => {
         API.ticketServed(id)
-        .then((t) => {
-            setCounter({id: counter.id, available: counter.available, currentTicket: null, services: counter.services});
-        })
+        .catch((err) => handleErrors(err));
+        API.getCounter(id)
+        .then((c) => setCounter(c))
         .catch((err) => handleErrors(err));
     };
 

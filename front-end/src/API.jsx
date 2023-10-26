@@ -72,7 +72,7 @@ async function callCustomer(counterId) {
   if (response.ok) {
     return {
       id: ticket.id,
-      serviceCode: ticket.serviceCode,
+      service_code: ticket.service_code,
       creationDate: ticket.creationDate
     }
   } else {
