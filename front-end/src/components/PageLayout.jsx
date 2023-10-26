@@ -98,15 +98,21 @@ function OfficerLayout() {
         .catch((err) => handleErrors(err));
     };
 
+    const terminateService = () => {
+        API.ticketServed(id)
+        .then((t) => {
+            setNewCustomer(null);
+            console.log(t);
+        })
+        .catch((err) => handleErrors(err));
+    };
+
 
     return (
         <Container style={centerStyle}>
-            <Row>
-                <Col>
-                    <Button variant="primary" onClick={handleCallCustomer}>Call Next Customer</Button>
-                </Col>
-            </Row>
             {newCustomer && (
+                <div>
+                <h1>You are now serving customer {newCustomer.id}</h1>
                 <Row>
                     <Col>
                         <Alert variant="success">
@@ -114,7 +120,18 @@ function OfficerLayout() {
                         </Alert>
                     </Col>
                 </Row>
+                </div>
             )}
+            <Row>
+                <Col>
+                    <Button variant="primary" onClick={handleCallCustomer}>Call Next Customer</Button>
+                </Col>
+                {newCustomer && (
+                    <Col>
+                        <Button variant="danger" onClick={terminateService}>Terminate Service</Button>
+                    </Col>
+                )}
+            </Row>
         </Container>
     );
 }

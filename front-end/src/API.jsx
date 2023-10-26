@@ -80,7 +80,24 @@ async function callCustomer(counterId) {
   }
 }
 
+//POST to terminate a ticket service
+async function ticketServed(counterId) {
+  const response = await fetch(URL + `/counters/${counterId}/ticket-served`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const ticket = await response.json();
+  if (response.ok) {
+    console.log(ticket);
+    return ticket;
+  }else {
+    throw ticket;
+  }
+}
+
 const API = {
-  createTicket, getServices, getCounters, callCustomer
+  createTicket, getServices, getCounters, callCustomer, ticketServed
 };
 export default API;
