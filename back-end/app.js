@@ -4,6 +4,9 @@ const express = require('express');
 const cors = require('cors');
 const { timeoutHandlerMiddleware } = require("./src/middlewares/timeout-handler");
 const { AppError } = require("./src/errors/AppError");
+const corsOptions = {
+    origin: 'http://localhost:5173',
+};
 
 
 const app = express()
@@ -13,6 +16,9 @@ const app = express()
     .use( express.json() )
     .use( express.urlencoded({ extended: true }) )
     .use( timeoutHandlerMiddleware );
+
+// Cors
+app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/services', require('./src/routes/services') );

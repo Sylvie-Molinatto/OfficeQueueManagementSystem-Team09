@@ -38,4 +38,19 @@ describe('[SERVICE] Check office queue service', () => {
                 .rejects.toThrow(UnknownServiceOfficeError);
         });
     });
+
+    describe('Retrieve all services', () => {
+        test('Should return all services', async () => {
+            const result = await service.getAllServices();
+
+            expect(Array.isArray(result)).toBe(true); // Check if the result is an array
+
+            result.forEach(service => {
+            expect(service).toHaveProperty('label');
+            expect(service).toHaveProperty('description');
+            expect(service).toHaveProperty('code');
+            });
+        });
+
+    });
 });

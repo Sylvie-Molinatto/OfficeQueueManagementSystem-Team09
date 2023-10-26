@@ -2,6 +2,16 @@ const service = require('../services/office-queue');
 const serializer = require('../services/serializer');
 const { UnknownServiceOfficeError } = require("../errors/UnknownServiceOfficeError");
 
+async function getAllServices(req, res, next) {
+    try {
+        const services = await service.getAllServices();
+
+        res.status(200).json( services.map(serializer.serializeTicket) );
+    } catch (err) {
+        next(err);
+    }
+}
+
 async function addTicketToQueue(req, res, next) {
     try {
         if (!req.params.code) {
@@ -16,4 +26,4 @@ async function addTicketToQueue(req, res, next) {
     }
 }
 
-module.exports = { addTicketToQueue };
+module.exports = { getAllServices, addTicketToQueue };
