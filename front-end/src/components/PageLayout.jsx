@@ -137,11 +137,11 @@ function OfficerLayout() {
             )}
             <Row>
                 <Col>
-                    <Button variant="primary" onClick={handleCallCustomer}>Call Next Customer</Button>
+                    <Button variant="primary" onClick={handleCallCustomer} className="little-margin">Call Next Customer</Button>
                 </Col>
                 {newCustomer && (
                     <Col>
-                        <Button variant="danger" onClick={terminateService}>Terminate Service</Button>
+                        <Button variant="danger" onClick={terminateService} className="little-margin">Terminate Service</Button>
                     </Col>
                 )}
             </Row>

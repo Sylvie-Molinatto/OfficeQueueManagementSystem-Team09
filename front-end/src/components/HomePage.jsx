@@ -37,10 +37,11 @@ const HomePage = (props) => {
             <Row className="justify-content-center mt-5">
                 <Col md={6} className="text-center">
                     <h1>Welcome to Office Queue Management System</h1>
+                    <br></br>
                     <p>Please select your role:</p>
                     <Form>
                         <Form.Group controlId="roleSelection">
-                            <Form.Control as="select" value={selectedRole} onChange={handleRoleSelection}>
+                            <Form.Control as="select" value={selectedRole} onChange={handleRoleSelection} className='little-margin'>
                                 <option value="Client">Client</option>
                                 <option value="Officer">Officer</option>
                                 <option value="Monitor">Monitor</option>
@@ -62,7 +63,7 @@ const HomePage = (props) => {
                             </ul>
                         </div>
                     )}
-                    <Button variant="primary" onClick={handleRouteSelection}>Go to {selectedRole} page</Button>
+                    <Button variant="primary" onClick={handleRouteSelection} className='little-margin'>Go to {selectedRole} page</Button>
                 </Col>
             </Row>
         </Container>
