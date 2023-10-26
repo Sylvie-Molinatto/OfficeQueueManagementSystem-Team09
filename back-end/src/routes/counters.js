@@ -25,4 +25,12 @@ router.get('/:id', controller.getCounterById);
  */
 router.post('/:id/ticket-served', controller.indicateTicketServed);
 
+/**
+ * @description Request a new customer (ticket)
+ *
+ * @route /api/counters/:id/request-customer
+ * @method POST
+ */
+router.post('/:id/request-customer', controller.callCustomer);
+
 module.exports = router;

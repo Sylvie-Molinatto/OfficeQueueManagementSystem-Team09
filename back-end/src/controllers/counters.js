@@ -36,7 +36,19 @@ async function indicateTicketServed(req, res, next) {
     }
 }
 
-module.exports = { listCounters, getCounterById, indicateTicketServed };
+async function callCustomer(req, res, next) {
+    try {
+        const id = _extractCounterIdFromReq(req);
+
+        const ticket = await service.callCustomer(id);
+
+        res.json( serializer.serializeTicket(ticket) );
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = { listCounters, getCounterById, indicateTicketServed, callCustomer };
 
 function _extractCounterIdFromReq(req) {
     const idStr = req.params.id;
