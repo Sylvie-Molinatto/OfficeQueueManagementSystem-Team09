@@ -94,11 +94,7 @@ function OfficerLayout() {
 
     const handleCallCustomer = () => {
         API.callCustomer(id)
-        .then((x) => {
-            const ticket = { id: x.id, serviceCode: x.serviceCode, creationDate: x.creationDate };
-            console.log(ticket);
-            setNewCustomer(ticket);
-        })
+        .then((x) => setNewCustomer(x))
         .catch((err) => handleErrors(err));
     };
 
