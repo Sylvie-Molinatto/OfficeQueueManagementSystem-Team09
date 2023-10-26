@@ -92,9 +92,13 @@ function OfficerLayout() {
     };
     const { handleErrors } = useContext(MessageContext);
 
-    const callCustomer = () => {
+    const handleCallCustomer = () => {
         API.callCustomer(id)
-        .then((x) => setNewCustomer(x))
+        .then((x) => {
+            const ticket = { id: x.id, serviceCode: x.serviceCode, creationDate: x.creationDate };
+            console.log(ticket);
+            setNewCustomer(ticket);
+        })
         .catch((err) => handleErrors(err));
     };
 
@@ -103,14 +107,14 @@ function OfficerLayout() {
         <Container style={centerStyle}>
             <Row>
                 <Col>
-                    <Button variant="primary" onClick={() => callCustomer()}>Call Next Customer</Button>
+                    <Button variant="primary" onClick={handleCallCustomer}>Call Next Customer</Button>
                 </Col>
             </Row>
             {newCustomer && (
                 <Row>
                     <Col>
                         <Alert variant="success">
-                            Your next customer to be served is {newCustomer}!
+                            Your next customer to be served is {newCustomer.id}!
                         </Alert>
                     </Col>
                 </Row>
