@@ -1,6 +1,16 @@
 const service = require('../services/office-queue');
 const { UnknownServiceOfficeError } = require("../errors/UnknownServiceOfficeError");
 
+async function getAllServices(req, res, next) {
+    try {
+        const services = await service.getAllServices();
+
+        res.status(200).json( services.map(serializeService) );
+    } catch (err) {
+        next(err);
+    }
+}
+
 async function addTicketToQueue(req, res, next) {
     try {
         if (!req.params.code) {
@@ -15,10 +25,11 @@ async function addTicketToQueue(req, res, next) {
     }
 }
 
-module.exports = { addTicketToQueue };
+module.exports = { getAllServices, addTicketToQueue };
 
 /**
  * @param {Ticket} ticket
+ *
  * @return {TicketSerialized}
  */
 function serializeTicket(ticket) {
@@ -31,6 +42,27 @@ function serializeTicket(ticket) {
         completionDate: ticket.completion_date,
     };
 }
+
+/**
+ * @param {Service} service
+ *
+ * @return {ServiceSerialized}
+ */
+function serializeService(service) {
+    return {
+        code: service.code,
+        label: service.label,
+        description: service.description,
+    };
+}
+
+/**
+ * @typedef {Object} ServiceSerialized
+ *
+ * @property {string} code The service identifier code
+ * @property {string} label The service label
+ * @property {string} description The service description
+ */
 
 /**
  * @typedef {Object} TicketSerialized
