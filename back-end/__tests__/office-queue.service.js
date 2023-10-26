@@ -33,7 +33,7 @@ describe('[SERVICE] Check office queue service', () => {
             expect(ticket).toHaveProperty('completion_date');
         });
 
-        test('should throw an error since service doesn\'t exist', async () => {
+        test('should throw an error since service doesn\'t exist', () => {
             return expect(service.addTicketToQueue('unknown-service'))
                 .rejects.toThrow(UnknownServiceOfficeError);
         });
