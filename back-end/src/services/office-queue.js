@@ -1,4 +1,3 @@
-const { SqliteError } = require("better-sqlite3");
 const db = require("./db");
 const { UnknownServiceOfficeError } = require("../errors/UnknownServiceOfficeError");
 
@@ -27,7 +26,7 @@ class OfficeQueueService {
 
             return db.prepare('SELECT * FROM tickets WHERE id = ?').get(res.lastInsertRowid);
         } catch (e) {
-            if (e instanceof SqliteError && e.code === 'SQLITE_CONSTRAINT_FOREIGNKEY') {
+            if (e.code === 'SQLITE_CONSTRAINT_FOREIGNKEY') {
                 throw new UnknownServiceOfficeError(code);
             }
 
