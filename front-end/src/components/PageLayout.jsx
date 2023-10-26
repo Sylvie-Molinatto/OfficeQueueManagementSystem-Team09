@@ -1,73 +1,89 @@
-import { Form, Button, Container, Row, Col, Card, Dropdown, DropdownButton, Alert } from "react-bootstrap";
-import React, { useState } from 'react';
-let tickets = ["A10", "B20"];
+import { Button, Container, Row, Col, Card, DropdownButton, Alert, Spinner } from "react-bootstrap";
+import { useState, useEffect } from 'react';
+import API from '../API'
 
 
 function ClientLayout() {
-  const [ticketNumber1, setTicketNumber1] = useState(0);
-  const [ticketNumber2, setTicketNumber2] = useState(0);
-  const [ticketNumber3, setTicketNumber3] = useState(0);
-  const [newTicket, setNewTicket] = useState(null);
-  
 
+    const [services, setServices] = useState([]); // Array of empty objects for storing services
+    const [ticket, setTicket] = useState(null); // Empty object for storing infos of the last created ticket
+    const [isLoading, setIsLoading] = useState(true);
 
-  const centerStyle = {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-  };
+    useEffect(() => {
+        API.getServices()
+            .then((x) => {
+                setServices(x);
+                setIsLoading(false);
+            })
+            .catch((err) => handleError(err));
+    }, []);
 
-  const generateTicket = (service) => {
-      let generatedTicket;
-      switch (service) {
-          case 1:
-              generatedTicket = `A${ticketNumber1}`;
-              setTicketNumber1(ticketNumber1 + 1);
-              break;
-          case 2:
-              generatedTicket = `B${ticketNumber2}`;
-              setTicketNumber2(ticketNumber2 + 1);
-              break;
-          case 3:
-              generatedTicket = `C${ticketNumber3}`;
-              setTicketNumber3(ticketNumber3 + 1);
-              break;
-          default:
-              generatedTicket = 'Invalid Service';
-      }
+    function handleError(err) {
+        //todo show error messages (maybe as toast)
+    }
 
-      // Aggiorna lo stato newTicket con il biglietto generato
-      setNewTicket(generatedTicket);
-      tickets.push(generatedTicket);
-  };
+    function MyAlert() {
+        return (
+            <Alert variant="success" className="mt-4">
+                <Alert.Heading>TICKET CORRECTLY ISSUED</Alert.Heading>
+                <hr />
+                <p>QUEUE: {ticket.serviceCode}</p>
+                <hr />
+                <p>TICKET NUMBER: {ticket.id}</p>
+                <hr />
+                <p className="mb-0">CREATION DATE: {ticket.creationDate}</p>
+            </Alert>
+        );
+    }
 
-  return (
-      <Container style={centerStyle}>
-          <Row>
-              <Col>
-                  <DropdownButton title="Get a Ticket">
-                      <Dropdown.Item onClick={() => generateTicket(1)}>Servizio 1</Dropdown.Item>
-                      <Dropdown.Item onClick={() => generateTicket(2)}>Servizio 2</Dropdown.Item>
-                      <Dropdown.Item onClick={() => generateTicket(3)}>Servizio 3</Dropdown.Item>
-                  </DropdownButton>
-              </Col>
-          </Row>
-          {newTicket && (
-              <Row>
-                  <Col>
-                      <Alert variant="success">
-                          Your ticket is {newTicket}!
-                      </Alert>
-                  </Col>
-              </Row>
-          )}
-      </Container>
-  );
+    function MyCard(props) {
+        return (
+            <Card className="mt-2" style={{ width: '18rem' }}>
+                <Card.Body>
+                    <Card.Title>{props.service.label}</Card.Title>
+                    <Card.Text>{props.service.description}</Card.Text>
+                    <Button variant="secondary" onClick={() => props.createTicket(props.service.code)}>GET TICKET</Button>
+                </Card.Body>
+            </Card>
+        );
+    }
+
+    function ServiceList() {
+
+        const createTicket = (code) => {
+            API.createTicket(code)
+                .then((x) => setTicket(x))
+                .catch((err) => handleError(err));
+        }
+
+        return (
+            <Container className="mt-4">
+                {services.map((x) => <MyCard createTicket={createTicket} service={x} key={x.code} />)}
+            </Container>
+        )
+    }
+
+    return (
+        <Container>
+            <Row>
+                <Col>
+                    {isLoading ?
+                        <Spinner animation="grow" variant="black" />
+                        :
+                        <ServiceList />
+                    }
+                </Col>
+                <Col>
+                    {ticket && <MyAlert />}
+                </Col>
+            </Row>
+        </Container>
+    );
 }
 
-function OfficerLayout(){
-  const [newCustomer, setNewCustomer] = useState(null);
+
+function OfficerLayout() {
+    const [newCustomer, setNewCustomer] = useState(null);
     const centerStyle = {
         display: 'flex',
         justifyContent: 'center',
@@ -76,8 +92,8 @@ function OfficerLayout(){
     };
 
     const callCustomer = () => {
-        let calledCustomer= tickets.pop();
-        setNewCustomer(calledCustomer);
+        //let calledCustomer= tickets.pop();
+        //setNewCustomer(calledCustomer);
     };
 
 
@@ -85,7 +101,7 @@ function OfficerLayout(){
         <Container style={centerStyle}>
             <Row>
                 <Col>
-                <Button variant="primary" onClick={() => callCustomer()}>Call Next Customer</Button>
+                    <Button variant="primary" onClick={() => callCustomer()}>Call Next Customer</Button>
                 </Col>
             </Row>
             {newCustomer && (
@@ -101,11 +117,11 @@ function OfficerLayout(){
     );
 }
 
-function MonitorLayout(){
-  return(
-    <>
-    </>
-  );
+function MonitorLayout() {
+    return (
+        <>
+        </>
+    );
 }
 
 export { ClientLayout, OfficerLayout, MonitorLayout };
