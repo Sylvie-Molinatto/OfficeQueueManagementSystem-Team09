@@ -1,12 +1,14 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require('cors');
 const { timeoutHandlerMiddleware } = require("./src/middlewares/timeout-handler");
 const { AppError } = require("./src/errors/AppError");
 
 
 const app = express()
     .disable('x-powered-by')
+    .use( cors({ origin: 'http://localhost:5173' }) )
     .use( express.static(__dirname + '/public') )
     .use( express.json() )
     .use( express.urlencoded({ extended: true }) )
