@@ -17,4 +17,12 @@ router.get('/', controller.listCounters);
  */
 router.get('/:id', controller.getCounterById);
 
+/**
+ * @description Indicate that the counter served the current ticket
+ *
+ * @route /api/counters/:id/ticket-served
+ * @method POST
+ */
+router.post('/:id/ticket-served', controller.indicateTicketServed);
+
 module.exports = router;

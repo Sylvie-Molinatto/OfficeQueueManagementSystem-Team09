@@ -1,4 +1,5 @@
 const service = require('../services/counters');
+const serializer = require('../services/serializer');
 const { UnknownCounterError } = require("../errors/UnknownCounterError");
 
 async function listCounters(req, res, next) {
@@ -13,11 +14,7 @@ async function listCounters(req, res, next) {
 
 async function getCounterById(req, res, next) {
     try {
-        const idStr = req.params.id;
-        const id = Number(idStr);
-        if (isNaN(id)) {
-            throw new UnknownCounterError(idStr);
-        }
+        const id = _extractCounterIdFromReq(req);
 
         const counter = await service.getCounterById(id);
 
@@ -27,4 +24,26 @@ async function getCounterById(req, res, next) {
     }
 }
 
-module.exports = { listCounters, getCounterById };
+async function indicateTicketServed(req, res, next) {
+    try {
+        const id = _extractCounterIdFromReq(req);
+
+        const ticket = await service.indicateTicketAsServed(id);
+
+        res.json( serializer.serializeTicket(ticket) );
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = { listCounters, getCounterById, indicateTicketServed };
+
+function _extractCounterIdFromReq(req) {
+    const idStr = req.params.id;
+    const id = Number(idStr);
+    if (isNaN(id)) {
+        throw new UnknownCounterError(idStr);
+    }
+
+    return id;
+}

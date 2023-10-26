@@ -1,5 +1,6 @@
 const db = require("./db");
 const { UnknownCounterError } = require("../errors/UnknownCounterError");
+const { InvalidCounterStateError } = require("../errors/InvalidCounterStateError");
 
 class CountersService {
     /**
@@ -29,6 +30,26 @@ class CountersService {
         const servicesManaged = db.prepare("SELECT * FROM services LEFT OUTER JOIN main.counters_services cs on services.code = cs.service_code WHERE counter_id = ?").all(id);
 
         return this._formatCounterFromRow(row, ticket, servicesManaged);
+    }
+
+    /**
+     * @param {number} id
+     *
+     * @return {Promise<Ticket>}
+     */
+    async indicateTicketAsServed(id) {
+        const res = db.prepare("UPDATE tickets SET completion_date = datetime('now') WHERE counter_id = ? AND serving_date IS NOT NULL AND completion_date IS NULL").run(id);
+        if (res.changes !== 1) {
+            // Invalid counter id or no ticket currently served, try to determine which one
+            const counter = db.prepare("SELECT * FROM counters WHERE id = ?").get(id);
+            if (counter) {
+                throw new InvalidCounterStateError(`The counter with "${id}" is not serving a ticket.`)
+            } else {
+                throw new UnknownCounterError(id);
+            }
+        }
+
+        return db.prepare("SELECT * FROM tickets WHERE counter_id = ?").get(id);
     }
 
 
