@@ -132,11 +132,11 @@ function OfficerLayout() {
         <Container style={centerStyle}>
             {counter.currentTicket && (
                 <div>
-                <h1>You are now serving customer {counter.currentTicket.id}</h1>
+                <h3>You are now serving customer #{counter.currentTicket.id}!</h3>
                 <Row>
                     <Col>
-                        <Alert variant="success">
-                            Your next customer to be served is {counter.currentTicket.id}!
+                        <Alert variant="primary">
+                            Service code: {counter.currentTicket.service_code}
                         </Alert>
                     </Col>
                 </Row>
