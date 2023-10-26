@@ -2,8 +2,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import MessageContext from './messageCtx';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Container, Toast } from 'react-bootstrap';
-import { ClientLayout, OfficerLayout, MonitorLayout } from './components/pageLayout';
+import { Container, Toast,} from 'react-bootstrap';
+import { ClientLayout, OfficerLayout, MonitorLayout } from './components/PageLayout';
 import { useState } from 'react';
 import './App.css'
 import { Navigation } from './components/Navigation';
@@ -28,9 +28,18 @@ function App() {
       <MessageContext.Provider value={{handleErrors}}>
         <Container fluid className="no-padding">
           <Navigation/>
-          <Toast show={message !== ''} onClose={() => setMessage('')} delay={4000} autohide className="d-inline-block m-1 toast" bg="danger">
-            <Toast.Body>{ message }</Toast.Body>
-          </Toast>
+          <Container fluid className="d-flex justify-content-center align-items-center">
+              <Toast
+                show={message !== ''}
+                onClose={() => setMessage('')}
+                delay={4000}
+                autohide
+                className="d-inline-block m-1 toast"
+                bg="danger"
+              >
+                <Toast.Body>{message}</Toast.Body>
+              </Toast>
+            </Container>
           <Routes>
             <Route path="/" element={<HomePage handleErrors={handleErrors}/>}/>
             <Route path="/Client" element={<ClientLayout/>}/>
