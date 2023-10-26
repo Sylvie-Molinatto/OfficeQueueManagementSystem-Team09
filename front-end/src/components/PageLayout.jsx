@@ -99,22 +99,19 @@ function OfficerLayout() {
             setCounter(c);
             setLoading(false);
         })
-        .catch((err) => handleErrors(err));
-    }, []);
+            .catch((err) => handleErrors(err));
+        
+    }, [loading]);
 
     const handleCallCustomer = () => {
         API.callCustomer(id)
-        .catch((err) => handleErrors(err));
-        API.getCounter(id)
-        .then((c) => setCounter(c))
+        .then(setLoading(true))
         .catch((err) => handleErrors(err));
     };
 
     const terminateService = () => {
         API.ticketServed(id)
-        .catch((err) => handleErrors(err));
-        API.getCounter(id)
-        .then((c) => setCounter(c))
+        .then(setLoading(true))
         .catch((err) => handleErrors(err));
     };
 
@@ -147,7 +144,9 @@ function OfficerLayout() {
                     <Button variant="primary" onClick={handleCallCustomer} className="little-margin">Call Next Customer</Button>
                 </Col>
                 }   
-                {counter.currentTicket && (
+            </Row>
+            <Row>
+            {counter.currentTicket && (
                     <Col>
                         <Button variant="danger" onClick={terminateService} className="little-margin">Terminate Service</Button>
                     </Col>
