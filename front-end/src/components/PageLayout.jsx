@@ -92,6 +92,19 @@ function OfficerLayout() {
     };
     const { handleErrors } = useContext(MessageContext);
 
+    useEffect(() => {
+        API.pendingTicket(id)
+        .then((t) => {
+            if(t){
+                setNewCustomer(t);
+            }
+            else{
+                setNewCustomer(null);
+            }
+        })
+        .catch((err) => handleErrors(err));
+    }, []);
+
     const handleCallCustomer = () => {
         API.callCustomer(id)
         .then((x) => setNewCustomer(x))

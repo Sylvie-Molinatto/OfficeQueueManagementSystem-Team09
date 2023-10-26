@@ -34,3 +34,13 @@ router.post('/:id/ticket-served', controller.indicateTicketServed);
 router.post('/:id/request-customer', controller.callCustomer);
 
 module.exports = router;
+
+/**
+ * @description GET a pending ticket for a counter
+ *
+ * @route /api/counters/:id/pending
+ * @method GET
+ */
+router.get('/:id/pending', controller.getPendingTicket);
+
+module.exports = router;

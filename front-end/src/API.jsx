@@ -90,14 +90,29 @@ async function ticketServed(counterId) {
   });
   const ticket = await response.json();
   if (response.ok) {
-    console.log(ticket);
     return ticket;
   }else {
     throw ticket;
   }
 }
 
+async function pendingTicket(counterId){
+  const response = await fetch(URL +`/counters/${counterId}/pending`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const ticket = await response.json();
+  console.log(ticket)
+  if (response.ok) {
+    return ticket;
+  }else{
+    throw ticket;
+  }
+}
+
 const API = {
-  createTicket, getServices, getCounters, callCustomer, ticketServed
+  createTicket, getServices, getCounters, callCustomer, ticketServed, pendingTicket
 };
 export default API;
