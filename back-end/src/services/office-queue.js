@@ -43,3 +43,11 @@ module.exports = service;
  * @property {string | null} serving_date The date when the ticket was called in ISO 8601 format
  * @property {string | null} completion_date The date when the ticket was served in ISO 8601 format
  */
+
+/**
+ * @typedef {Object} ServiceRow
+ *
+ * @property {string} code The service identifier code
+ * @property {string} label The service name
+ * @property {string} description A short description of the service
+ */

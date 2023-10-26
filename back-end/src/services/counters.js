@@ -17,25 +17,39 @@ class CountersService {
      * @return {Promise<Counter>}
      */
     async getCounterById(id) {
+        /** @type {CounterRow | undefined} */
         const row = db.prepare("SELECT * FROM counters WHERE id = ?").get(id);
-
         if (!row) {
             throw new UnknownCounterError(id);
         }
 
-        return this._formatCounterFromRow(row);
+        /** @type {Ticket | null} */
+        const ticket = db.prepare("SELECT * FROM tickets WHERE counter_id = ? AND completion_date IS NULL").get(id) ?? null;
+        /** @type {ServiceRow[]} */
+        const servicesManaged = db.prepare("SELECT * FROM services LEFT OUTER JOIN main.counters_services cs on services.code = cs.service_code WHERE counter_id = ?").all(id);
+
+        return this._formatCounterFromRow(row, ticket, servicesManaged);
     }
 
 
     /**
      * @param {CounterRow} row
+     * @param {Ticket | null} [ticket]
+     * @param {ServiceRow[]} [servicesManaged]
+     *
      * @return {Counter}
      * @private
      */
-    _formatCounterFromRow(row) {
+    _formatCounterFromRow(row, ticket, servicesManaged) {
         return {
             id: row.id,
             available: Boolean(row.available),
+            currentTicket: ticket,
+            services: servicesManaged.map( service => ({
+                code: service.code,
+                label: service.label,
+                description: service.description,
+            }) )
         };
     }
 }
@@ -49,6 +63,7 @@ module.exports = service;
  *
  * @property {number} id The counter id
  * @property {boolean} available The availability of the counter
+ * @property {Ticket | null} currentTicket The current ticket served by the counter
  */
 
 /**
