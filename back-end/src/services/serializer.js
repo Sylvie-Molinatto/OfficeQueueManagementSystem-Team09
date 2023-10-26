@@ -14,6 +14,17 @@ class SerializerService {
         };
     }
 
+    /**
+     * @param {Service} service
+     * @return {ServiceSerialized}
+     */
+    serializeService(service) {
+        return {
+            code: service.code,
+            label: service.label,
+            description: service.description,
+        };
+    }
 }
 
 const service = new SerializerService();
@@ -29,4 +40,12 @@ module.exports = service;
  * @property {number | null} counterId The id of the counter that serve the ticket
  * @property {string | null} servingDate The date when the ticket was called in ISO 8601 format
  * @property {string | null} completionDate The date when the ticket was served in ISO 8601 format
+ */
+
+/**
+ * @typedef {Object} ServiceSerialized
+ *
+ * @property {string} code The code of the service
+ * @property {string} label The label of the service
+ * @property {string} description The description of the service
  */

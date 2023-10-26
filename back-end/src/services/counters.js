@@ -25,7 +25,7 @@ class CountersService {
         }
 
         const ticket = this._getCurrentTicketServed(id) ?? null;
-        /** @type {ServiceRow[]} */
+        /** @type {Service[]} */
         const servicesManaged = db.prepare("SELECT * FROM services LEFT OUTER JOIN main.counters_services cs on services.code = cs.service_code WHERE counter_id = ?").all(id);
 
         return this._formatCounterFromRow(row, ticket, servicesManaged);
@@ -82,7 +82,7 @@ class CountersService {
     /**
      * @param {CounterRow} row
      * @param {Ticket | null} [ticket]
-     * @param {ServiceRow[]} [servicesManaged]
+     * @param {Service[]} [servicesManaged]
      *
      * @return {Counter}
      * @private
@@ -121,7 +121,7 @@ module.exports = service;
  * @property {number} id The counter id
  * @property {boolean} available The availability of the counter
  * @property {Ticket | null} currentTicket The current ticket served by the counter
- * @property {ServiceRow[]} services The list of services managed by the counter
+ * @property {Service[]} services The list of services managed by the counter
  */
 
 /**

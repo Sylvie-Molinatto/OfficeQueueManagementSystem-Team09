@@ -6,7 +6,7 @@ async function getAllServices(req, res, next) {
     try {
         const services = await service.getAllServices();
 
-        res.status(200).json( services.map(serializer.serializeTicket) );
+        res.status(200).json( services.map(serializer.serializeService) );
     } catch (err) {
         next(err);
     }
