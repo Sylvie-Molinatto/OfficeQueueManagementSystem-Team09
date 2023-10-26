@@ -92,7 +92,7 @@ class CountersService {
             id: row.id,
             available: Boolean(row.available),
             currentTicket: ticket,
-            services: servicesManaged.map( service => ({
+            services: servicesManaged?.map( service => ({
                 code: service.code,
                 label: service.label,
                 description: service.description,
@@ -121,6 +121,7 @@ module.exports = service;
  * @property {number} id The counter id
  * @property {boolean} available The availability of the counter
  * @property {Ticket | null} currentTicket The current ticket served by the counter
+ * @property {ServiceRow[]} services The list of services managed by the counter
  */
 
 /**

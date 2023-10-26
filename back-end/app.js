@@ -29,7 +29,7 @@ app.use((err, req, res, next) => {
     } else {
         console.error(err);
 
-        res.status(500).send({ message: err.message || 'Internal server error' });
+        res.status(500).send({ message: 'Internal server error' });
     }
 });
 

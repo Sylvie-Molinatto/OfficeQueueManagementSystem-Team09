@@ -9,6 +9,10 @@ jest.mock('../src/services/office-queue', () => ({
 }));
 
 describe('[ROUTES] Office services', () => {
+    afterAll(() => {
+        jest.resetAllMocks();
+    });
+
     describe('POST /api/services/:code/queue', () => {
         test('should return the formatted ticket while request success', async () => {
             service.addTicketToQueue.mockResolvedValue({
