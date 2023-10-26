@@ -96,23 +96,30 @@ async function ticketServed(counterId) {
   }
 }
 
-async function pendingTicket(counterId){
-  const response = await fetch(URL +`/counters/${counterId}/pending`, {
+//GET the counter information
+const getCounter = async (counterId) => {
+  const response = await fetch(URL + `/counters/${counterId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  const ticket = await response.json();
-  console.log(ticket)
+  const counter = await response.json();
   if (response.ok) {
-    return ticket;
-  }else{
-    throw ticket;
+    return {
+      id: counter.id,
+      available: counter.available,
+      currentTicket: counter.currentTicket,
+      services: counter.services
+    }
+  } else {
+    throw counter;
   }
 }
 
+
+
 const API = {
-  createTicket, getServices, getCounters, callCustomer, ticketServed, pendingTicket
+  createTicket, getServices, getCounters, callCustomer, ticketServed, getCounter
 };
 export default API;

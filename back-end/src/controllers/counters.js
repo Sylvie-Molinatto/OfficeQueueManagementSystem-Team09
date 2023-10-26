@@ -36,19 +36,6 @@ async function indicateTicketServed(req, res, next) {
     }
 }
 
-async function getPendingTicket(req, res, next) {
-    try {
-        const id = _extractCounterIdFromReq(req);
-
-        const ticket = await service.pendingTicket(id); 
-        console.log(ticket);
-
-        res.json( serializer.serializeTicket(ticket) );
-    } catch (err) {
-        next(err);
-    }
-}
-
 async function callCustomer(req, res, next) {
     try {
         const id = _extractCounterIdFromReq(req);
@@ -61,7 +48,7 @@ async function callCustomer(req, res, next) {
     }
 }
 
-module.exports = { listCounters, getCounterById, indicateTicketServed, callCustomer, getPendingTicket };
+module.exports = { listCounters, getCounterById, indicateTicketServed, callCustomer };
 
 function _extractCounterIdFromReq(req) {
     const idStr = req.params.id;

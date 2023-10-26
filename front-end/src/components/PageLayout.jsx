@@ -1,4 +1,4 @@
-import { Button, Container, Row, Col, Card, DropdownButton, Alert, Spinner } from "react-bootstrap";
+import { Button, Container, Row, Col, Card, DropdownButton, Spinner, Alert } from "react-bootstrap";
 import { useState, useEffect, useContext } from 'react';
 import { useParams } from "react-router-dom";
 import MessageContext from "../messageCtx";
@@ -83,7 +83,8 @@ function ClientLayout() {
 
 function OfficerLayout() {
     const {id} = useParams();
-    const [newCustomer, setNewCustomer] = useState(null);
+    const [counter, setCounter] = useState(null);
+    const [loading, setLoading] = useState(true);
     const centerStyle = {
         display: 'flex',
         justifyContent: 'center',
@@ -93,53 +94,60 @@ function OfficerLayout() {
     const { handleErrors } = useContext(MessageContext);
 
     useEffect(() => {
-        API.pendingTicket(id)
-        .then((t) => {
-            if(t){
-                setNewCustomer(t);
-            }
-            else{
-                setNewCustomer(null);
-            }
+        API.getCounter(id)
+        .then((c) => { 
+            setCounter(c);
+            setLoading(false);
         })
         .catch((err) => handleErrors(err));
     }, []);
 
     const handleCallCustomer = () => {
         API.callCustomer(id)
-        .then((x) => setNewCustomer(x))
+        .then((x) => {
+            setCounter({id: counter.id, available: counter.available, currentTicket: x, services: counter.services});
+        })
         .catch((err) => handleErrors(err));
     };
 
     const terminateService = () => {
         API.ticketServed(id)
         .then((t) => {
-            setNewCustomer(null);
-            console.log(t);
+            setCounter({id: counter.id, available: counter.available, currentTicket: null, services: counter.services});
         })
         .catch((err) => handleErrors(err));
     };
 
+    if (loading) {
+        return (
+            <Container style={centerStyle}>
+                <Spinner animation="border" role="status">
+                    <span className="sr-only">Loading...</span>
+                </Spinner>
+            </Container>
+        );
+    }
 
     return (
         <Container style={centerStyle}>
-            {newCustomer && (
+            {counter.currentTicket && (
                 <div>
-                <h1>You are now serving customer {newCustomer.id}</h1>
+                <h1>You are now serving customer {counter.currentTicket.id}</h1>
                 <Row>
                     <Col>
                         <Alert variant="success">
-                            Your next customer to be served is {newCustomer.id}!
+                            Your next customer to be served is {counter.currentTicket.id}!
                         </Alert>
                     </Col>
                 </Row>
                 </div>
             )}
-            <Row>
+            <Row>{!counter.currentTicket &&
                 <Col>
                     <Button variant="primary" onClick={handleCallCustomer} className="little-margin">Call Next Customer</Button>
                 </Col>
-                {newCustomer && (
+                }   
+                {counter.currentTicket && (
                     <Col>
                         <Button variant="danger" onClick={terminateService} className="little-margin">Terminate Service</Button>
                     </Col>

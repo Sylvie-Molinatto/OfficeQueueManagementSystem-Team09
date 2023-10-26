@@ -85,15 +85,6 @@ class CountersService {
         return this._getCurrentTicketServed(id);
     }
 
-    async pendingTicket(id){
-        const ticket = db.prepare("SELECT * FROM tickets WHERE counter_id = ? AND serving_date IS NOT NULL AND completion_date IS NULL").get(id);
-        if (!ticket) {
-            throw new Error("No pending ticket");
-        }
-        console.log(ticket);
-        return ticket;
-    }
-
 
     /**
      * @param {CounterRow} row
