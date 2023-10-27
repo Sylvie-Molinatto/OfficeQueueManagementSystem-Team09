@@ -2,8 +2,6 @@ const db = require("./db");
 const { UnknownCounterError } = require("../errors/UnknownCounterError");
 const { InvalidCounterStateError } = require("../errors/InvalidCounterStateError");
 const dayjs = require("dayjs");
-const utc = require("dayjs/plugin/utc");
-dayjs.extend(utc);
 
 class CountersService {
     /**
@@ -40,7 +38,7 @@ class CountersService {
      * @return {Promise<Ticket>}
      */
     async indicateTicketAsServed(id) {
-        const date = dayjs.utc().format("YYYY-MM-DD HH:mm:ss");
+        const date = dayjs.format("YYYY-MM-DD HH:mm:ss");
         const res = db.prepare("UPDATE tickets SET completion_date = ? WHERE counter_id = ? AND serving_date IS NOT NULL AND completion_date IS NULL LIMIT 1").run(date, id);
         if (res.changes !== 1) {
             // Invalid counter id or no ticket currently served, try to determine which one
@@ -61,7 +59,7 @@ class CountersService {
      * @return {Promise<Ticket>}
      */
     async callCustomer(id) {
-        const date = dayjs.utc().format("YYYY-MM-DD HH:mm:ss");
+        const date = dayjs.format("YYYY-MM-DD HH:mm:ss");
         // Self-called transaction
         db.transaction(() => {
             const counter = db.prepare("SELECT * FROM counters WHERE id = ?").get(id);
