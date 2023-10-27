@@ -16,10 +16,10 @@
     - Homepage of the website where you have to select your role (client, officer, monitor)
 - Route `/Client`:
     - Client view where he can select a service type to obtain a ticket
-- Route `/Officer/:id` 
-    - Officer view where he can signal that he has termined to serve a client and he can call a new customer, if exists.
-- Route `/Monitor` (NOT IMPLEMENTED):
-    - Monitor view where there is the list of the tickets assigned to the respective queue 
+- Route `/Officer/:id`:
+    - Officer view where he can signal that he has termined to serve a client and he can call a new customer, if exists
+- Route `/Monitor`:
+    - Monitor view where there is the list of the counters and the ticket number each one of them is serving
 
 
 
