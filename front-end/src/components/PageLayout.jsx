@@ -82,7 +82,7 @@ function ClientLayout() {
 
 
 function OfficerLayout() {
-    const {id} = useParams();
+    const { id } = useParams();
     const [counter, setCounter] = useState(null);
     const [loading, setLoading] = useState(true);
     const centerStyle = {
@@ -95,24 +95,24 @@ function OfficerLayout() {
 
     useEffect(() => {
         API.getCounter(id)
-        .then((c) => { 
-            setCounter(c);
-            setLoading(false);
-        })
+            .then((c) => {
+                setCounter(c);
+                setLoading(false);
+            })
             .catch((err) => handleErrors(err));
-        
+
     }, [loading]);
 
     const handleCallCustomer = () => {
         API.callCustomer(id)
-        .then(setLoading(true))
-        .catch((err) => handleErrors(err));
+            .then(setLoading(true))
+            .catch((err) => handleErrors(err));
     };
 
     const terminateService = () => {
         API.ticketServed(id)
-        .then(setLoading(true))
-        .catch((err) => handleErrors(err));
+            .then(setLoading(true))
+            .catch((err) => handleErrors(err));
     };
 
     if (loading) {
@@ -129,24 +129,24 @@ function OfficerLayout() {
         <Container style={centerStyle}>
             {counter.currentTicket && (
                 <div>
-                <h3>You are now serving customer #{counter.currentTicket.id}!</h3>
-                <Row>
-                    <Col>
-                        <Alert variant="primary">
-                            Service code: {counter.currentTicket.service_code}
-                        </Alert>
-                    </Col>
-                </Row>
+                    <h3>You are now serving customer #{counter.currentTicket.id}!</h3>
+                    <Row>
+                        <Col>
+                            <Alert variant="primary">
+                                Service code: {counter.currentTicket.service_code}
+                            </Alert>
+                        </Col>
+                    </Row>
                 </div>
             )}
             <Row>{!counter.currentTicket &&
                 <Col>
                     <Button variant="primary" onClick={handleCallCustomer} className="little-margin">Call Next Customer</Button>
                 </Col>
-                }   
+            }
             </Row>
             <Row>
-            {counter.currentTicket && (
+                {counter.currentTicket && (
                     <Col>
                         <Button variant="danger" onClick={terminateService} className="little-margin">Terminate Service</Button>
                     </Col>
@@ -157,10 +157,93 @@ function OfficerLayout() {
 }
 
 function MonitorLayout() {
+
+    const [counters, SetCounters] = useState([]); // Array of empty objects for storing counters info
+    const [isLoading, setIsLoading] = useState(true);
+    const { handleErrors } = useContext(MessageContext);
+
+    useEffect(() => {
+        API.getCounters()
+            .then((x) => {
+                SetCounters(x);
+                setIsLoading(false);
+            })
+            .catch((err) => handleErrors(err));
+    }, []);
+
+
+    function CounterCard(props) {
+
+        const [servingTicket, setServingTicket] = useState(null); // retrieve the ticket number that is being served by Counter Id
+        const [isLoading, setIsLoading] = useState(true);
+
+        const pollingInterval = 5000;
+
+        const getServingTicket = () => {
+            API.getServingTicketByCounterId(props.id)
+                .then((x) => {
+                    setServingTicket(x);
+                    setIsLoading(false);
+                })
+                .catch((err) => handleErrors(err));
+        };
+
+        useEffect(() => {
+            getServingTicket();
+            const intervalId = setInterval(() => {
+                getServingTicket();
+            }, pollingInterval);
+
+            return () => { clearInterval(intervalId); }; //Reset interval
+        }, []);
+
+        return (
+            <>
+                <Card className="mt-2" style={{ width: '24rem' }}>
+                    <Card.Body>
+                        <Card.Title className="text-center">COUNTER #{props.id}</Card.Title>
+                        {isLoading ?
+                            <Spinner animation="grow" variant="black" />
+                            :
+                            <Card.Text>{
+                                servingTicket ?
+                                    <Alert variant="warning" className="mt-4 text-center">Serving ticket number #{servingTicket} </Alert>
+                                    :
+                                    <Alert variant="danger" className="mt-4 text-center">Currently not serving anyone </Alert>
+                            }
+                            </Card.Text>
+                        }
+                    </Card.Body>
+                </Card>
+            </>
+        );
+    }
+
+    function CounterList() {
+
+        return (
+            <Container className="mt-4">
+                <Row>
+                    {counters.map((x) => (
+                        <div className="col-lg-4 col-md-6 col-sm-12" key={x.id}>
+                            <CounterCard id={x.id} />
+                        </div>
+                    ))}
+                </Row>
+            </Container>
+        )
+    }
+
     return (
         <>
+            {isLoading ?
+                <Spinner animation="grow" variant="black" />
+                :
+                <CounterList />
+            }
         </>
     );
 }
+
 
 export { ClientLayout, OfficerLayout, MonitorLayout };
