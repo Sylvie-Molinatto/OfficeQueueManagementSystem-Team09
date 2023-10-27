@@ -117,9 +117,20 @@ const getCounter = async (counterId) => {
   }
 }
 
-
+//GET counter info by counter id
+async function getServingTicketByCounterId(id) {
+  const response = await fetch(URL + `/counters/${id}`);
+  const info = await response.json();
+  if (response.ok) {
+    return (
+      info.currentTicket ? info.currentTicket.id : null
+    );
+  } else {
+    throw info;
+  }
+}
 
 const API = {
-  createTicket, getServices, getCounters, callCustomer, ticketServed, getCounter
+  createTicket, getServices, getCounters, callCustomer, ticketServed, getCounter, getServingTicketByCounterId
 };
 export default API;
