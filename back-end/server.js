@@ -54,7 +54,7 @@ function onListening() {
  * Catch ERR_HTTP_HEADERS_SENT and ignore it
  */
 process.on('uncaughtException', function(err) {
-    if (err && err.code && err.code === 'ERR_HTTP_HEADERS_SENT') {
+    if (err?.code === 'ERR_HTTP_HEADERS_SENT') {
         return
     }
     throw err
